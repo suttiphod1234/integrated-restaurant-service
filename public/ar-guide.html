@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Setup & Hiro Marker Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap');
+        body { font-family: 'Prompt', sans-serif; background: #f1f5f9; }
+        .marker-box { border: 20px solid black; padding: 40px; background: white; display: inline-block; }
+        .step-card { transition: transform 0.3s ease; }
+        .step-card:hover { transform: translateY(-5px); }
+    </style>
+</head>
+<body class="py-10 px-4">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-3xl font-extrabold text-slate-800 mb-2">คู่มือการตั้งค่า AR สำหรับคุณครู</h1>
+            <p class="text-slate-500">ทำตาม 3 ขั้นตอนด้านล่างเพื่อเริ่มใช้งานระบบจำลองบนมือถือ</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <!-- Step 1 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 step-card">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-4 text-xl">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 mb-2">1. อัปโหลดไฟล์</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">นำไฟล์ <span class="font-mono bg-slate-100 p-0.5">Restaurant_Immersive_AR_Simulator.html</span> ไปอัปโหลดบนเว็บโฮสติ้งที่เป็น <b>HTTPS</b> เช่น GitHub Pages หรือ Vercel</p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 step-card">
+                <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-4 text-xl">
+                    <i class="fas fa-qrcode"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 mb-2">2. สร้าง QR Code</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">เมื่อได้ลิงก์ (URL) มาแล้ว ให้นำมาสร้าง QR Code เพื่อให้นักเรียนสแกนเปิดแอปพลิเคชันบนมือถือ</p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 step-card">
+                <div class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mb-4 text-xl">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 mb-2">3. สแกน Marker</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">เปิดแอปบนมือถือ ส่องกล้องไปที่ <b>Hiro Marker</b> (รูปด้านล่าง) เพื่อให้ลูกค้า 3D ปรากฏตัว</p>
+            </div>
+        </div>
+
+        <!-- QR Generator Tool -->
+        <div class="bg-slate-800 rounded-3xl p-8 mb-12 text-white shadow-xl">
+            <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                <i class="fas fa-magic text-blue-400"></i> สร้าง QR Code เปิดแอป
+            </h2>
+            <div class="flex flex-col md:flex-row gap-6 items-center">
+                <div class="flex-1 w-full">
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-2">ใส่ลิงก์ URL ของคุณที่นี่ (HTTPS เท่านั้น)</label>
+                    <input type="text" id="url-input" placeholder="https://your-name.github.io/ar-sim" 
+                           class="w-full bg-slate-700 border border-slate-600 rounded-xl p-4 text-sm outline-none focus:border-blue-500 transition">
+                    <button onclick="generateQR()" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition">
+                        สร้าง QR สำหรับนักเรียน
+                    </button>
+                </div>
+                <div id="qrcode-container" class="bg-white p-4 rounded-2xl hidden shadow-2xl">
+                    <div id="qrcode"></div>
+                    <p class="text-slate-800 text-[10px] font-bold text-center mt-2">SCAN TO START SIMULATOR</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hiro Marker Section -->
+        <div class="text-center bg-white rounded-3xl p-10 shadow-sm border border-slate-200">
+            <h2 class="text-2xl font-black text-slate-800 mb-4 uppercase tracking-widest">Hiro Marker</h2>
+            <p class="text-slate-500 text-sm mb-8 italic">ให้นักเรียนส่องกล้องมาที่รูปนี้ (พิมพ์ใส่กระดาษหรือเปิดบนจอ)</p>
+            
+            <div class="marker-box shadow-2xl mb-6">
+                <img src="https://jeromeetienne.github.io/AR.js/data/images/HIRO.jpg" alt="Hiro Marker" class="w-64 h-64">
+            </div>
+            
+            <div class="flex justify-center gap-4">
+                <button onclick="window.print()" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 px-6 py-2 rounded-full transition">
+                    <i class="fas fa-print mr-2"></i> พิมพ์แผ่นมาร์กเกอร์
+                </button>
+                <a href="https://jeromeetienne.github.io/AR.js/data/images/HIRO.jpg" target="_blank" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 px-6 py-2 rounded-full transition">
+                    <i class="fas fa-external-link-alt mr-2"></i> เปิดรูปขนาดใหญ่
+                </a>
+            </div>
+        </div>
+
+        <footer class="mt-12 text-center text-slate-400 text-[10px] uppercase font-bold tracking-[0.2em]">
+            FINE AR Training Ecosystem • Developed for Vocational Education
+        </footer>
+    </div>
+
+    <script>
+        function generateQR() {
+            const url = document.getElementById('url-input').value;
+            const container = document.getElementById('qrcode-container');
+            const qrDiv = document.getElementById('qrcode');
+            
+            if (!url) {
+                alert("กรุณาใส่ URL ก่อนครับ");
+                return;
+            }
+
+            qrDiv.innerHTML = "";
+            new QRCode(qrDiv, {
+                text: url,
+                width: 180,
+                height: 180,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            
+            container.classList.remove('hidden');
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
